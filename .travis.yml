@@ -1,10 +1,14 @@
+---
+sudo: false
 language: cpp
 compiler:
-  - gcc
   - clang
+  - gcc
+os:
+  - linux
+  - osx
 script:
   - mkdir _build
   - cd _build
-  - cmake .. -DCMAKE_INSTALL_PREFIX=../_install
-  - cmake --build . --target install
-  - ctest -V .
+  - cmake -DCMAKE_CXX_FLAGS=-DRVO_OUTPUT_TIME_AND_POSITIONS=0 ..
+  - ctest --extra-verbose --dashboard Experimental .

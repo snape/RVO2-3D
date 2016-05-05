@@ -1,5 +1,5 @@
 #
-# examples/CMakeLists.txt
+# CTestConfig.cmake
 # RVO2-3D Library
 #
 # Copyright 2008 University of North Carolina at Chapel Hill
@@ -30,10 +30,10 @@
 # <http://gamma.cs.unc.edu/RVO2/>
 #
 
-include_directories("${RVO_SOURCE_DIR}/src")
+set(CTEST_PROJECT_NAME "RVO2-3D")
+set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
 
-add_executable(Sphere Sphere.cpp)
-target_link_libraries(Sphere RVO)
-add_test(Sphere Sphere)
-
-install(TARGETS Sphere DESTINATION bin)
+set(CTEST_DROP_METHOD "http")
+set(CTEST_DROP_SITE "my.cdash.org")
+set(CTEST_DROP_LOCATION "/submit.php?project=RVO2")
+set(CTEST_DROP_SITE_CDASH TRUE)
