@@ -32,15 +32,15 @@
 
 /* Example file showing a demo with 812 agents initially positioned evenly distributed on a sphere attempting to move to the antipodal position on the sphere. */
 
-#ifndef RVO_OUTPUT_TIME_AND_POSITIONS
-#define RVO_OUTPUT_TIME_AND_POSITIONS 1
+#ifndef RVO3D_OUTPUT_TIME_AND_POSITIONS
+#define RVO3D_OUTPUT_TIME_AND_POSITIONS 1
 #endif
 
 #include <cmath>
 #include <cstddef>
 #include <vector>
 
-#if RVO_OUTPUT_TIME_AND_POSITIONS
+#if RVO3D_OUTPUT_TIME_AND_POSITIONS
 #include <iostream>
 #endif
 
@@ -76,7 +76,7 @@ void setupScenario(RVO::RVOSimulator *sim)
 	}
 }
 
-#if RVO_OUTPUT_TIME_AND_POSITIONS
+#if RVO3D_OUTPUT_TIME_AND_POSITIONS
 void updateVisualization(RVO::RVOSimulator *sim)
 {
 	/* Output the current global time. */
@@ -127,7 +127,7 @@ int main()
 
 	/* Perform (and manipulate) the simulation. */
 	do {
-#if RVO_OUTPUT_TIME_AND_POSITIONS
+#if RVO3D_OUTPUT_TIME_AND_POSITIONS
 		updateVisualization(sim);
 #endif
 		setPreferredVelocities(sim);

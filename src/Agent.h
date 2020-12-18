@@ -34,10 +34,8 @@
  * \file    Agent.h
  * \brief   Contains the Agent class.
  */
-#ifndef RVO_AGENT_H_
-#define RVO_AGENT_H_
-
-#include "API.h"
+#ifndef RVO3D_AGENT_H_
+#define RVO3D_AGENT_H_
 
 #include <cstddef>
 #include <utility>
@@ -99,4 +97,4 @@ namespace RVO {
 	};
 }
 
-#endif /* RVO_AGENT_H_ */
+#endif /* RVO3D_AGENT_H_ */

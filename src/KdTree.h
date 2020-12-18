@@ -33,10 +33,8 @@
  * \file    KdTree.h
  * \brief   Contains the KdTree class.
  */
-#ifndef RVO_KD_TREE_H_
-#define RVO_KD_TREE_H_
-
-#include "API.h"
+#ifndef RVO3D_KD_TREE_H_
+#define RVO3D_KD_TREE_H_
 
 #include <cstddef>
 #include <vector>
@@ -119,4 +117,4 @@ namespace RVO {
 	};
 }
 
-#endif /* RVO_KD_TREE_H_ */
+#endif /* RVO3D_KD_TREE_H_ */

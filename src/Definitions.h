@@ -35,10 +35,8 @@
  * \brief  Contains functions and constants used in multiple classes.
  */
 
-#ifndef RVO_DEFINITIONS_H_
-#define RVO_DEFINITIONS_H_
-
-#include "API.h"
+#ifndef RVO3D_DEFINITIONS_H_
+#define RVO3D_DEFINITIONS_H_
 
 namespace RVO {
 	/**
@@ -52,4 +50,4 @@ namespace RVO {
 	}
 }
 
-#endif /* RVO_DEFINITIONS_H_ */
+#endif /* RVO3D_DEFINITIONS_H_ */

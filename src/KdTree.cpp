@@ -39,7 +39,7 @@
 #include "RVOSimulator.h"
 
 namespace RVO {
-	const size_t RVO_MAX_LEAF_SIZE = 10;
+	const size_t RVO3D_MAX_LEAF_SIZE = 10;
 
 	KdTree::KdTree(RVOSimulator *sim) : sim_(sim) { }
 
@@ -69,7 +69,7 @@ namespace RVO {
 			agentTree_[node].minCoord[2] = std::min(agentTree_[node].minCoord[2], agents_[i]->position_.z());
 		}
 
-		if (end - begin > RVO_MAX_LEAF_SIZE) {
+		if (end - begin > RVO3D_MAX_LEAF_SIZE) {
 			/* No leaf node. */
 			size_t coord;
 
@@ -128,7 +128,7 @@ namespace RVO {
 
 	void KdTree::queryAgentTreeRecursive(Agent *agent, float &rangeSq, size_t node) const
 	{
-		if (agentTree_[node].end - agentTree_[node].begin <= RVO_MAX_LEAF_SIZE) {
+		if (agentTree_[node].end - agentTree_[node].begin <= RVO3D_MAX_LEAF_SIZE) {
 			for (size_t i = agentTree_[node].begin; i < agentTree_[node].end; ++i) {
 				agent->insertAgentNeighbor(agents_[i], rangeSq);
 			}

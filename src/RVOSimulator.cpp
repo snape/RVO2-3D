@@ -103,7 +103,7 @@ namespace RVO {
 	size_t RVOSimulator::addAgent(const Vector3 &position)
 	{
 		if (defaultAgent_ == NULL) {
-			return RVO_ERROR;
+			return RVO3D_ERROR;
 		}
 
 		Agent *agent = new Agent(this);

@@ -1,3 +1,6 @@
+# -*- mode: cmake -*-
+# vi: set ft=cmake :
+
 #
 # examples/CMakeLists.txt
 # RVO2-3D Library
@@ -30,10 +33,49 @@
 # <https://gamma.cs.unc.edu/RVO2/>
 #
 
-include_directories("${RVO_SOURCE_DIR}/src")
+if(BUILD_TESTING)
+  option(OUTPUT_TIME_AND_POSITIONS "Output time and positions" ON)
 
-add_executable(Sphere Sphere.cpp)
-target_link_libraries(Sphere RVO)
-add_test(Sphere Sphere)
+  if(OUTPUT_TIME_AND_POSITIONS)
+    set(RVO3D_EXAMPLES_COMPILE_DEFINITIONS
+      RVO3D_OUTPUT_TIME_AND_POSITIONS=1)
+  else()
+    set(RVO3D_EXAMPLES_COMPILE_DEFINITIONS
+      RVO3D_OUTPUT_TIME_AND_POSITIONS=0)
+  endif()
 
-install(TARGETS Sphere DESTINATION bin)
+  option(SEED_RANDOM_NUMBER_GENERATOR "Seed random number generator" ON)
+
+  if(SEED_RANDOM_NUMBER_GENERATOR)
+    list(APPEND RVO3D_EXAMPLES_COMPILE_DEFINITIONS
+      RVO3D_SEED_RANDOM_NUMBER_GENERATOR=1)
+  else()
+    list(APPEND RVO3D_EXAMPLES_COMPILE_DEFINITIONS
+      RVO3D_SEED_RANDOM_NUMBER_GENERATOR=0)
+  endif()
+
+  if(ENABLE_OPENMP AND OpenMP_FOUND)
+    set(RVO3D_EXAMPLES_COMPILE_OPTIONS ${OpenMP_CXX_FLAGS})
+    set(RVO3D_EXAMPLES_LINK_FLAGS "${OpenMP_CXX_FLAGS}")
+  else()
+    set(RVO3D_EXAMPLES_COMPILE_OPTIONS)
+    set(RVO3D_EXAMPLES_LINK_FLAGS)
+  endif()
+
+  if(ENABLE_INTERPROCEDURAL_OPTIMIZATION
+      AND RVO3D_INTERPROCEDURAL_OPTIMIZATION_SUPPORTED)
+    set(RVO3D_EXAMPLES_INTERPROCEDURAL_OPTIMIZATION ON)
+  else()
+    set(RVO3D_EXAMPLES_INTERPROCEDURAL_OPTIMIZATION OFF)
+  endif()
+
+  add_executable(Sphere Sphere.cpp)
+  target_compile_definitions(Sphere PRIVATE
+    ${RVO3D_EXAMPLES_COMPILE_DEFINITIONS})
+  target_link_libraries(Sphere PRIVATE ${RVO3D_LIBRARY})
+  target_compile_options(Sphere PRIVATE ${RVO3D_EXAMPLES_COMPILE_OPTIONS})
+  set_target_properties(Sphere PROPERTIES
+    INTERPROCEDURAL_OPTIMIZATION ${RVO3D_EXAMPLES_INTERPROCEDURAL_OPTIMIZATION}
+    LINK_FLAGS "${RVO3D_EXAMPLES_LINK_FLAGS}")
+  add_test(NAME Sphere COMMAND Sphere)
+endif()

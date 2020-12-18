@@ -30,10 +30,10 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
-#ifndef RVO_RVO_H_
-#define RVO_RVO_H_
+#ifndef RVO3D_RVO_H_
+#define RVO3D_RVO_H_
 
-#include "API.h"
+#include "Export.h"
 #include "RVOSimulator.h"
 #include "Vector3.h"
 
@@ -90,31 +90,14 @@
  \page       building    Building RVO2-3D Library
 
  We assume that you have downloaded <b>RVO2-3D Library</b> and unpacked the ZIP
- archive to a path <tt>$RVO_ROOT</tt>.
-
- \section    xcode       Apple Xcode 4.x
-
- Open <tt>$RVO_ROOT/RVO.xcodeproj</tt> and select the <tt>Static Library</tt> scheme. A static library <tt>libRVO.a</tt> will be built in the default build directory.
+ archive to a path <tt>$RVO3D_ROOT</tt>.
 
  \section    cmake       CMake
 
- Create and switch to your chosen build directory, e.g. <tt>$RVO_ROOT/build</tt>.
+ Create and switch to your chosen build directory, e.g. <tt>$RVO3D_ROOT/build</tt>.
  Run <tt>cmake</tt> inside the build directory on the source directory, e.g.
- <tt>cmake $RVO_ROOT/src</tt>. Build files for the default generator for your
+ <tt>cmake $RVO3D_ROOT/src</tt>. Build files for the default generator for your
  platform will be generated in the build directory.
-
- \section    make        GNU Make
-
- Switch to the source directory <tt>$RVO_ROOT/src</tt> and run <tt>make</tt>.
- Public header files (<tt>API.h</tt>, <tt>RVO.h</tt>, <tt>RVOSimulator.h</tt>, and <tt>Vector3.h</tt>) will be copied to the <tt>$RVO_ROOT/include</tt> directory and a static library <tt>libRVO.a</tt> will be compiled into the
- <tt>$RVO_ROOT/lib</tt> directory.
-
- \section    visual      Microsoft Visual Studio 2010
-
- Open <tt>$RVO_ROOT/RVO.sln</tt> and select the <tt>RVOStatic</tt> project and a
- configuration (<tt>Debug</tt>  or <tt>Release</tt>). Public header files (<tt>API.h</tt>, <tt>RVO.h</tt>, <tt>RVOSimulator.h</tt>, and <tt>Vector3.h</tt>) will be copied to the <tt>$RVO_ROOT/include</tt> directory and a static library, e.g. <tt>RVO.lib</tt>, will be compiled into the
- <tt>$RVO_ROOT/lib</tt> directory.
-
 
  \page       using       Using RVO2-3D Library
 
@@ -284,7 +267,7 @@
  \section    example     Example Programs
 
  <b>RVO2-3D Library</b> is accompanied by one example program, which can be found in the
- <tt>$RVO_ROOT/examples</tt> directory. The example is named Sphere, and
+ <tt>$RVO3D_ROOT/examples</tt> directory. The example is named Sphere, and
  contains the following demonstration scenario:
  <table border="0" cellpadding="3" width="100%">
  <tr>
@@ -403,4 +386,4 @@
 
  */
 
-#endif /* RVO_RVO_H_ */
+#endif /* RVO3D_RVO_H_ */
