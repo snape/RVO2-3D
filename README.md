@@ -3,8 +3,8 @@ Optimal Reciprocal Collision Avoidance in Three Dimensions
 
 <https://gamma.cs.unc.edu/RVO2/>
 
-[![Build Status](https://travis-ci.org/snape/RVO2-3D.png?branch=master)](https://travis-ci.org/snape/RVO2-3D)
-[![Build status](https://ci.appveyor.com/api/projects/status/ov8ec3igv588wpx7/branch/master?svg=true)](https://ci.appveyor.com/project/snape/rvo2-3d)
+![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=master)
+[![Build Status](https://travis-ci.com/snape/RVO2-3D.png?branch=master)](https://travis-ci.com/snape/RVO2-3D)
 
 Copyright 2008 University of North Carolina at Chapel Hill
 
