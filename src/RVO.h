@@ -8,7 +8,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@
  * Chapel Hill, N.C. 27599-3175
  * United States of America
  *
- * <http://gamma.cs.unc.edu/RVO2/>
+ * <https://gamma.cs.unc.edu/RVO2/>
  */
 
 #ifndef RVO_RVO_H_
@@ -50,7 +50,7 @@
  \author     Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, and Dinesh Manocha
 
  <b>RVO2-3D Library</b> is an easy-to-use C++ implementation of the
- <a href="http://gamma.cs.unc.edu/CA/">Optimal Reciprocal Collision Avoidance</a>
+ <a href="https://gamma.cs.unc.edu/CA/">Optimal Reciprocal Collision Avoidance</a>
  (ORCA) formulation for multi-agent simulation in three dimensions. <b>RVO2-3D Library</b>
  automatically uses parallelism for computing the motion of the agents if your machine
  has multiple processors and your compiler supports <a href="http://www.openmp.org/">
@@ -76,7 +76,7 @@
  \section    localca     Three Dimensions
 
  In contrast to RVO2 Library, <b>RVO2-3D Library</b> operates in 3D workspaces. It uses
- a three dimensional implementation of <a href="http://gamma.cs.unc.edu/CA/">Optimal
+ a three dimensional implementation of <a href="https://gamma.cs.unc.edu/CA/">Optimal
  Reciprocal Collision Avoidance</a> (ORCA) for local collision avoidance. <b>RVO2-3D
  Library</b> does not replace RVO2 Library; for 2D applications, RVO2 Library should
  be used.
@@ -393,7 +393,7 @@
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
