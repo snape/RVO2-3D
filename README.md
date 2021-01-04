@@ -3,6 +3,25 @@ Optimal Reciprocal Collision Avoidance in Three Dimensions
 
 <https://gamma.cs.unc.edu/RVO2/>
 
+We present a formal approach to reciprocal collision avoidance, where multiple
+independent mobile robots or agents need to avoid collisions with each other
+without communication among agents while moving in a common workspace. Our
+formulation, optimal reciprocal collision avoidance (ORCA), provides sufficient
+conditions for collision-free motion by letting each agent take half of the
+responsibility of avoiding pairwise collisions. Selecting the optimal action for
+each agent is reduced to solving a low-dimensional linear program, and we prove
+that the resulting motions are smooth. We test our optimal reciprocal collision
+avoidance approach on several dense and complex simulation scenarios workspaces
+involving thousands of agents, and compute collision-free actions for all of
+them in only a few milliseconds.
+
+RVO2-3D Library is an open-source C++98 implementation of our algorithm in three
+dimensions. It has a simple API for third-party applications. The user specifies
+agents and their preferred velocities. The simulation is performed step-by-step
+via a simple call to the library. The simulation is fully accessible and
+manipulable during runtime. The library exploits multiple processors if they are
+available using OpenMP for efficient parallelization of the simulation.
+
 ![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=master)
 [![Build Status](https://travis-ci.com/snape/RVO2-3D.png?branch=master)](https://travis-ci.com/snape/RVO2-3D)
 
@@ -12,7 +31,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<https://www.apache.org/licenses/LICENSE-2.0>
+&nbsp;&nbsp;<https://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
