@@ -22,8 +22,8 @@ via a simple call to the library. The simulation is fully accessible and
 manipulable during runtime. The library exploits multiple processors if they are
 available using OpenMP for efficient parallelization of the simulation.
 
-![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=master)
-[![Build Status](https://travis-ci.com/snape/RVO2-3D.png?branch=master)](https://travis-ci.com/snape/RVO2-3D)
+![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=main)
+[![Build Status](https://travis-ci.com/snape/RVO2-3D.png?branch=main)](https://travis-ci.com/snape/RVO2-3D)
 
 Copyright 2008 University of North Carolina at Chapel Hill
 
