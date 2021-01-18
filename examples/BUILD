@@ -39,7 +39,8 @@ licenses(["notice"])
 
 cc_test(
     name = "Sphere",
-    size = "small",
+    size = "medium",
+    timeout = "short",
     srcs = ["Sphere.cpp"],
     defines = [
         "RVO3D_OUTPUT_TIME_AND_POSITIONS=0",
