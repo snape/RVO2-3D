@@ -42,10 +42,7 @@ cc_test(
     size = "medium",
     timeout = "short",
     srcs = ["Sphere.cpp"],
-    defines = [
-        "RVO3D_OUTPUT_TIME_AND_POSITIONS=0",
-        "RVO3D_SEED_RANDOM_NUMBER_GENERATOR=0",
-    ],
+    defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
     visibility = ["//visibility:public"],
     deps = ["//src:RVO3D"],
 )
