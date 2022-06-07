@@ -2,7 +2,8 @@
  * RVO.h
  * RVO2-3D Library
  *
- * Copyright 2008 University of North Carolina at Chapel Hill
+ * SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
+ * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@
 
  \mainpage   RVO2-3D Library
 
- \author     Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, and Dinesh Manocha
+ \author     Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, Dinesh Manocha
 
  <b>RVO2-3D Library</b> is an easy-to-use C++ implementation of the
  <a href="https://gamma.cs.unc.edu/CA/">Optimal Reciprocal Collision Avoidance</a>
