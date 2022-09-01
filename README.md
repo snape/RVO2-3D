@@ -60,6 +60,8 @@ Optimal Reciprocal Collision Avoidance in Three Dimensions
 
 <https://gamma.cs.unc.edu/RVO2/>
 
+[![DOI](https://zenodo.org/badge/10955299.svg)](https://zenodo.org/badge/latestdoi/10955299)
+
 We present a formal approach to reciprocal collision avoidance, where multiple
 independent mobile robots or agents need to avoid collisions with each other
 without communication among agents while moving in a common workspace. Our
