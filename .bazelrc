@@ -1,8 +1,5 @@
-# -*- mode: bazel; -*-
-# vi: set ft=bazel:
-
 #
-# examples/BUILD.bazel
+# .bazelrc
 # RVO2-3D Library
 #
 # SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
@@ -34,19 +31,11 @@
 # <https://gamma.cs.unc.edu/RVO2/>
 #
 
-load("@rules_cc//cc:defs.bzl", "cc_test")
+build --enable_platform_specific_config=true
+build --force_pic=true
+build --legacy_external_runfiles=false
 
-package(default_applicable_licenses = ["//:license"])
+build:macos --apple_generate_dsym=true
+build:macos --apple_platform_type=macos
 
-licenses(["notice"])  # Apache-2.0
-
-cc_test(
-    name = "Sphere",
-    size = "medium",
-    timeout = "short",
-    srcs = ["Sphere.cpp"],
-    defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
-    tags = ["block-network"],
-    visibility = ["//visibility:private"],
-    deps = ["//src:RVO3D"],
-)
+try-import %workspace%/.user.bazelrc

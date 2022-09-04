@@ -36,5 +36,6 @@
 
 /_build/
 /.idea/
+/.user.bazelrc
 /bazel-*
 /cmake-build-*/
