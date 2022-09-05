@@ -42,10 +42,13 @@ set(RVO3D_HEADERS
 set(RVO3D_SOURCES
   Agent.cpp
   Agent.h
+  Definitions.cpp
   Definitions.h
+  Export.cpp
   KdTree.cpp
   KdTree.h
-  RVOSimulator.cpp)
+  RVOSimulator.cpp
+  Vector3.cpp)
 
 add_library(${RVO3D_LIBRARY} ${RVO3D_HEADERS} ${RVO3D_SOURCES})
 

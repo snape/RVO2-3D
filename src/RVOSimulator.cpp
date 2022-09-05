@@ -33,6 +33,8 @@
 
 #include "RVOSimulator.h"
 
+#include <utility>
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif

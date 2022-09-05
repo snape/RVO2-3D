@@ -34,6 +34,7 @@
 #include "KdTree.h"
 
 #include <algorithm>
+#include <utility>
 
 #include "Agent.h"
 #include "Definitions.h"

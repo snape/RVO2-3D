@@ -120,10 +120,13 @@ cc_library(
     srcs = [
         "Agent.cpp",
         "Agent.h",
+        "Definitions.cpp",
         "Definitions.h",
+        "Export.cpp",
         "KdTree.cpp",
         "KdTree.h",
         "RVOSimulator.cpp",
+        "Vector3.cpp",
     ],
     hdrs = [":hdrs"],
     copts = [
