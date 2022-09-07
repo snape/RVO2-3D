@@ -83,7 +83,7 @@ jobs:
               --warn-uninitialized \
               ..
             cmake --build .
-            ctest .
+            ctest . --repeat after-timeout:3
             cmake --install .
 
 workflows:
