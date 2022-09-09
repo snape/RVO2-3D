@@ -44,7 +44,7 @@ cc_test(
     name = "Sphere",
     size = "medium",
     timeout = "short",
-    srcs = ["Sphere.cpp"],
+    srcs = ["Sphere.cc"],
     defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
     tags = ["block-network"],
     visibility = ["//visibility:private"],

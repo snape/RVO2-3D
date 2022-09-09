@@ -1,5 +1,5 @@
 /*
- * RVOSimulator.cpp
+ * RVOSimulator.cc
  * RVO2-3D Library
  *
  * SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill

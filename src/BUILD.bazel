@@ -118,15 +118,15 @@ filegroup(
 cc_library(
     name = "RVO3D",
     srcs = [
-        "Agent.cpp",
+        "Agent.cc",
         "Agent.h",
-        "Definitions.cpp",
+        "Definitions.cc",
         "Definitions.h",
-        "Export.cpp",
-        "KdTree.cpp",
+        "Export.cc",
+        "KdTree.cc",
         "KdTree.h",
-        "RVOSimulator.cpp",
-        "Vector3.cpp",
+        "RVOSimulator.cc",
+        "Vector3.cc",
     ],
     hdrs = [":hdrs"],
     copts = [

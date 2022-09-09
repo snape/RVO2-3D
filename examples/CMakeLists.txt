@@ -60,7 +60,7 @@ if(BUILD_TESTING)
     set(RVO3D_EXAMPLES_INTERPROCEDURAL_OPTIMIZATION OFF)
   endif()
 
-  add_executable(Sphere Sphere.cpp)
+  add_executable(Sphere Sphere.cc)
   target_compile_definitions(Sphere PRIVATE
     ${RVO3D_EXAMPLES_COMPILE_DEFINITIONS})
   target_link_libraries(Sphere PRIVATE ${RVO3D_LIBRARY})

@@ -1,5 +1,5 @@
 /*
- * Export.cpp
+ * Vector3.cc
  * RVO2-3D Library
  *
  * SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
@@ -31,4 +31,4 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
- #include "Export.h"
+ #include "Vector3.h"
