@@ -37,127 +37,228 @@
 #include <utility>
 
 #include "Agent.h"
-#include "Definitions.h"
 #include "RVOSimulator.h"
+#include "Vector3.h"
 
 namespace RVO {
-	const size_t RVO3D_MAX_LEAF_SIZE = 10;
+namespace {
+/**
+ * @brief The maximum size of a k-D leaf node.
+ */
+const std::size_t RVO3D_MAX_LEAF_SIZE = 10U;
+} /* namespace */
 
-	KdTree::KdTree(RVOSimulator *sim) : sim_(sim) { }
+/**
+ * @brief Defines an agent k-D tree node.
+ */
+class KdTree::AgentTreeNode {
+ public:
+  /**
+   * @brief Constructs an agent k-D tree node.
+   */
+  AgentTreeNode();
 
-	void KdTree::buildAgentTree()
-	{
-		agents_ = sim_->agents_;
+  /**
+   * @brief The beginning node number.
+   */
+  std::size_t begin;
 
-		if (!agents_.empty()) {
-			agentTree_.resize(2 * agents_.size() - 1);
-			buildAgentTreeRecursive(0, agents_.size(), 0);
-		}
-	}
+  /**
+   * @brief The ending node number.
+   */
+  std::size_t end;
 
-	void KdTree::buildAgentTreeRecursive(size_t begin, size_t end, size_t node)
-	{
-		agentTree_[node].begin = begin;
-		agentTree_[node].end = end;
-		agentTree_[node].minCoord = agents_[begin]->position_;
-		agentTree_[node].maxCoord = agents_[begin]->position_;
+  /**
+   * @brief The left node number.
+   */
+  std::size_t left;
 
-		for (size_t i = begin + 1; i < end; ++i) {
-			agentTree_[node].maxCoord[0] = std::max(agentTree_[node].maxCoord[0], agents_[i]->position_.x());
-			agentTree_[node].minCoord[0] = std::min(agentTree_[node].minCoord[0], agents_[i]->position_.x());
-			agentTree_[node].maxCoord[1] = std::max(agentTree_[node].maxCoord[1], agents_[i]->position_.y());
-			agentTree_[node].minCoord[1] = std::min(agentTree_[node].minCoord[1], agents_[i]->position_.y());
-			agentTree_[node].maxCoord[2] = std::max(agentTree_[node].maxCoord[2], agents_[i]->position_.z());
-			agentTree_[node].minCoord[2] = std::min(agentTree_[node].minCoord[2], agents_[i]->position_.z());
-		}
+  /**
+   * @brief The right node number.
+   */
+  std::size_t right;
 
-		if (end - begin > RVO3D_MAX_LEAF_SIZE) {
-			/* No leaf node. */
-			size_t coord;
+  /**
+   * @brief The maximum coordinates.
+   */
+  Vector3 maxCoord;
 
-			if (agentTree_[node].maxCoord[0] - agentTree_[node].minCoord[0] > agentTree_[node].maxCoord[1] - agentTree_[node].minCoord[1] && agentTree_[node].maxCoord[0] - agentTree_[node].minCoord[0] > agentTree_[node].maxCoord[2] - agentTree_[node].minCoord[2]) {
-				coord = 0;
-			}
-			else if (agentTree_[node].maxCoord[1] - agentTree_[node].minCoord[1] > agentTree_[node].maxCoord[2] - agentTree_[node].minCoord[2]) {
-				coord = 1;
-			}
-			else {
-				coord = 2;
-			}
+  /**
+   * @brief The minimum coordinates.
+   */
+  Vector3 minCoord;
+};
 
-			const float splitValue = 0.5f * (agentTree_[node].maxCoord[coord] + agentTree_[node].minCoord[coord]);
+KdTree::AgentTreeNode::AgentTreeNode()
+    : begin(0U), end(0U), left(0U), right(0U) {}
 
-			size_t left = begin;
+KdTree::KdTree(RVOSimulator *sim) : sim_(sim) {}
 
-			size_t right = end;
+KdTree::~KdTree() {}
 
-			while (left < right) {
-				while (left < right && agents_[left]->position_[coord] < splitValue) {
-					++left;
-				}
+void KdTree::buildAgentTree() {
+  agents_ = sim_->agents_;
 
-				while (right > left && agents_[right - 1]->position_[coord] >= splitValue) {
-					--right;
-				}
-
-				if (left < right) {
-					std::swap(agents_[left], agents_[right - 1]);
-					++left;
-					--right;
-				}
-			}
-
-			size_t leftSize = left - begin;
-
-			if (leftSize == 0) {
-				++leftSize;
-				++left;
-				++right;
-			}
-
-			agentTree_[node].left = node + 1;
-			agentTree_[node].right = node + 2 * leftSize;
-
-			buildAgentTreeRecursive(begin, left, agentTree_[node].left);
-			buildAgentTreeRecursive(left, end, agentTree_[node].right);
-		}
-	}
-
-	void KdTree::computeAgentNeighbors(Agent *agent, float rangeSq) const
-	{
-		queryAgentTreeRecursive(agent, rangeSq, 0);
-	}
-
-	void KdTree::queryAgentTreeRecursive(Agent *agent, float &rangeSq, size_t node) const
-	{
-		if (agentTree_[node].end - agentTree_[node].begin <= RVO3D_MAX_LEAF_SIZE) {
-			for (size_t i = agentTree_[node].begin; i < agentTree_[node].end; ++i) {
-				agent->insertAgentNeighbor(agents_[i], rangeSq);
-			}
-		}
-		else {
-			const float distSqLeft = sqr(std::max(0.0f, agentTree_[agentTree_[node].left].minCoord[0] - agent->position_.x())) + sqr(std::max(0.0f, agent->position_.x() - agentTree_[agentTree_[node].left].maxCoord[0])) + sqr(std::max(0.0f, agentTree_[agentTree_[node].left].minCoord[1] - agent->position_.y())) + sqr(std::max(0.0f, agent->position_.y() - agentTree_[agentTree_[node].left].maxCoord[1])) + sqr(std::max(0.0f, agentTree_[agentTree_[node].left].minCoord[2] - agent->position_.z())) + sqr(std::max(0.0f, agent->position_.z() - agentTree_[agentTree_[node].left].maxCoord[2]));
-
-			const float distSqRight = sqr(std::max(0.0f, agentTree_[agentTree_[node].right].minCoord[0] - agent->position_.x())) + sqr(std::max(0.0f, agent->position_.x() - agentTree_[agentTree_[node].right].maxCoord[0])) + sqr(std::max(0.0f, agentTree_[agentTree_[node].right].minCoord[1] - agent->position_.y())) + sqr(std::max(0.0f, agent->position_.y() - agentTree_[agentTree_[node].right].maxCoord[1])) + sqr(std::max(0.0f, agentTree_[agentTree_[node].right].minCoord[2] - agent->position_.z())) + sqr(std::max(0.0f, agent->position_.z() - agentTree_[agentTree_[node].right].maxCoord[2]));
-
-			if (distSqLeft < distSqRight) {
-				if (distSqLeft < rangeSq) {
-					queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].left);
-
-					if (distSqRight < rangeSq) {
-						queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].right);
-					}
-				}
-			}
-			else {
-				if (distSqRight < rangeSq) {
-					queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].right);
-
-					if (distSqLeft < rangeSq) {
-						queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].left);
-					}
-				}
-			}
-		}
-	}
+  if (!agents_.empty()) {
+    agentTree_.resize(2U * agents_.size() - 1U);
+    buildAgentTreeRecursive(0U, agents_.size(), 0U);
+  }
 }
+
+void KdTree::buildAgentTreeRecursive(std::size_t begin, std::size_t end,
+                                     std::size_t node) {
+  agentTree_[node].begin = begin;
+  agentTree_[node].end = end;
+  agentTree_[node].minCoord = agents_[begin]->position_;
+  agentTree_[node].maxCoord = agents_[begin]->position_;
+
+  for (std::size_t i = begin + 1U; i < end; ++i) {
+    agentTree_[node].maxCoord[0] =
+        std::max(agentTree_[node].maxCoord[0], agents_[i]->position_.x());
+    agentTree_[node].minCoord[0] =
+        std::min(agentTree_[node].minCoord[0], agents_[i]->position_.x());
+    agentTree_[node].maxCoord[1] =
+        std::max(agentTree_[node].maxCoord[1], agents_[i]->position_.y());
+    agentTree_[node].minCoord[1] =
+        std::min(agentTree_[node].minCoord[1], agents_[i]->position_.y());
+    agentTree_[node].maxCoord[2] =
+        std::max(agentTree_[node].maxCoord[2], agents_[i]->position_.z());
+    agentTree_[node].minCoord[2] =
+        std::min(agentTree_[node].minCoord[2], agents_[i]->position_.z());
+  }
+
+  if (end - begin > RVO3D_MAX_LEAF_SIZE) {
+    /* No leaf node. */
+    std::size_t coord = 0U;
+
+    if (agentTree_[node].maxCoord[0] - agentTree_[node].minCoord[0] >
+            agentTree_[node].maxCoord[1] - agentTree_[node].minCoord[1] &&
+        agentTree_[node].maxCoord[0] - agentTree_[node].minCoord[0] >
+            agentTree_[node].maxCoord[2] - agentTree_[node].minCoord[2]) {
+      coord = 0U;
+    } else if (agentTree_[node].maxCoord[1] - agentTree_[node].minCoord[1] >
+               agentTree_[node].maxCoord[2] - agentTree_[node].minCoord[2]) {
+      coord = 1U;
+    } else {
+      coord = 2U;
+    }
+
+    const float splitValue = 0.5F * (agentTree_[node].maxCoord[coord] +
+                                     agentTree_[node].minCoord[coord]);
+
+    std::size_t left = begin;
+
+    std::size_t right = end;
+
+    while (left < right) {
+      while (left < right && agents_[left]->position_[coord] < splitValue) {
+        ++left;
+      }
+
+      while (right > left &&
+             agents_[right - 1U]->position_[coord] >= splitValue) {
+        --right;
+      }
+
+      if (left < right) {
+        std::swap(agents_[left], agents_[right - 1U]);
+        ++left;
+        --right;
+      }
+    }
+
+    std::size_t leftSize = left - begin;
+
+    if (leftSize == 0U) {
+      ++leftSize;
+      ++left;
+    }
+
+    agentTree_[node].left = node + 1U;
+    agentTree_[node].right = node + 2U * leftSize;
+
+    buildAgentTreeRecursive(begin, left, agentTree_[node].left);
+    buildAgentTreeRecursive(left, end, agentTree_[node].right);
+  }
+}
+
+void KdTree::computeAgentNeighbors(Agent *agent, float rangeSq) const {
+  queryAgentTreeRecursive(agent, rangeSq, 0U);
+}
+
+void KdTree::queryAgentTreeRecursive(Agent *agent, float &rangeSq,
+                                     std::size_t node) const {
+  if (agentTree_[node].end - agentTree_[node].begin <= RVO3D_MAX_LEAF_SIZE) {
+    for (std::size_t i = agentTree_[node].begin; i < agentTree_[node].end;
+         ++i) {
+      agent->insertAgentNeighbor(agents_[i], rangeSq);
+    }
+  } else {
+    const float distSqLeftMinX =
+        std::max(0.0F, agentTree_[agentTree_[node].left].minCoord[0] -
+                           agent->position_.x());
+    const float distSqLeftMaxX =
+        std::max(0.0F, agent->position_.x() -
+                           agentTree_[agentTree_[node].left].maxCoord[0]);
+    const float distSqLeftMinY =
+        std::max(0.0F, agentTree_[agentTree_[node].left].minCoord[1] -
+                           agent->position_.y());
+    const float distSqLeftMaxY =
+        std::max(0.0F, agent->position_.y() -
+                           agentTree_[agentTree_[node].left].maxCoord[1]);
+    const float distSqLeftMinZ =
+        std::max(0.0F, agentTree_[agentTree_[node].left].minCoord[2] -
+                           agent->position_.z());
+    const float distSqLeftMaxZ =
+        std::max(0.0F, agent->position_.z() -
+                           agentTree_[agentTree_[node].left].maxCoord[2]);
+
+    const float distSqLeft =
+        distSqLeftMinX * distSqLeftMinX + distSqLeftMaxX * distSqLeftMaxX +
+        distSqLeftMinY * distSqLeftMinY + distSqLeftMaxY * distSqLeftMaxY +
+        distSqLeftMinZ * distSqLeftMinZ + distSqLeftMaxZ * distSqLeftMaxZ;
+
+    const float distSqRightMinX =
+        std::max(0.0F, agentTree_[agentTree_[node].right].minCoord[0] -
+                           agent->position_.x());
+    const float distSqRightMaxX =
+        std::max(0.0F, agent->position_.x() -
+                           agentTree_[agentTree_[node].right].maxCoord[0]);
+    const float distSqRightMinY =
+        std::max(0.0F, agentTree_[agentTree_[node].right].minCoord[1] -
+                           agent->position_.y());
+    const float distSqRightMaxY =
+        std::max(0.0F, agent->position_.y() -
+                           agentTree_[agentTree_[node].right].maxCoord[1]);
+    const float distSqRightMinZ =
+        std::max(0.0F, agentTree_[agentTree_[node].right].minCoord[2] -
+                           agent->position_.z());
+    const float distSqRightMaxZ =
+        std::max(0.0F, agent->position_.z() -
+                           agentTree_[agentTree_[node].right].maxCoord[2]);
+
+    const float distSqRight =
+        distSqRightMinX * distSqRightMinX + distSqRightMaxX * distSqRightMaxX +
+        distSqRightMinY * distSqRightMinY + distSqRightMaxY * distSqRightMaxY +
+        distSqRightMinZ * distSqRightMinZ + distSqRightMaxZ * distSqRightMaxZ;
+
+    if (distSqLeft < distSqRight) {
+      if (distSqLeft < rangeSq) {
+        queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].left);
+
+        if (distSqRight < rangeSq) {
+          queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].right);
+        }
+      }
+    } else {
+      if (distSqRight < rangeSq) {
+        queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].right);
+
+        if (distSqLeft < rangeSq) {
+          queryAgentTreeRecursive(agent, rangeSq, agentTree_[node].left);
+        }
+      }
+    }
+  }
+}
+} /* namespace RVO */

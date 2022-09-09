@@ -1,5 +1,8 @@
+# -*- mode: yaml; -*-
+# vi: set ft=yaml:
+
 #
-# requirements.txt
+# .clang-tidy
 # RVO2-3D Library
 #
 # SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
@@ -31,7 +34,36 @@
 # <https://gamma.cs.unc.edu/RVO2/>
 #
 
-cffconvert
-cmakelang
-reuse
-cpplint
+---
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  clang-diagnostic-*,
+  cppcoreguidelines-*,
+  google-*,
+  misc-*,
+  openmp-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-exception-escape,
+  -bugprone-narrowing-conversions,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-narrowing-conversions,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -misc-no-recursion,
+  -readability-identifier-length,
+  -readability-magic-numbers
+
+CheckOptions:
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: 1
+
+FormatStyle: file
+
+HeaderFilterRegex: '.*'
+
+WarningsAsErrors: '*'

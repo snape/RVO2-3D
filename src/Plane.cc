@@ -1,5 +1,5 @@
 /*
- * Definitions.cc
+ * Plane.cc
  * RVO2-3D Library
  *
  * SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
@@ -31,4 +31,8 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
- #include "Definitions.h"
+#include "Plane.h"
+
+namespace RVO {
+Plane::Plane() {}
+} /* namespace RVO */

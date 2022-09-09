@@ -35,6 +35,7 @@
 #
 
 set(RVO3D_HEADERS
+  Plane.h
   RVO.h
   RVOSimulator.h
   Vector3.h)
@@ -42,11 +43,10 @@ set(RVO3D_HEADERS
 set(RVO3D_SOURCES
   Agent.cc
   Agent.h
-  Definitions.cc
-  Definitions.h
   Export.cc
   KdTree.cc
   KdTree.h
+  Plane.cc
   RVOSimulator.cc
   Vector3.cc)
 

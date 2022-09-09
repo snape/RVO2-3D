@@ -1,5 +1,5 @@
 /*
- * Definitions.h
+ * Plane.h
  * RVO2-3D Library
  *
  * SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
@@ -31,24 +31,38 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
+#ifndef RVO3D_PLANE_H_
+#define RVO3D_PLANE_H_
+
 /**
- * \file   Definitions.h
- * \brief  Contains functions and constants used in multiple classes.
+ * @file  Plane.h
+ * @brief Contains the Plane class.
  */
 
-#ifndef RVO3D_DEFINITIONS_H_
-#define RVO3D_DEFINITIONS_H_
+#include "Export.h"
+#include "Vector3.h"
 
 namespace RVO {
-	/**
-	 * \brief   Computes the square of a float.
-	 * \param   scalar  The float to be squared.
-	 * \return  The square of the float.
-	 */
-	inline float sqr(float scalar)
-	{
-		return scalar * scalar;
-	}
-}
+/**
+ * @brief Defines a plane.
+ */
+class RVO3D_EXPORT Plane {
+ public:
+  /**
+   * @brief Constructs a plane.
+   */
+  Plane();
 
-#endif /* RVO3D_DEFINITIONS_H_ */
+  /**
+   * @brief A point on the plane.
+   */
+  Vector3 point;
+
+  /**
+   * @brief The normal to the plane.
+   */
+  Vector3 normal;
+};
+} /* namespace RVO */
+
+#endif /* RVO3D_PLANE_H_ */

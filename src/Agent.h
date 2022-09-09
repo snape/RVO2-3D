@@ -31,71 +31,88 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
-/**
- * \file    Agent.h
- * \brief   Contains the Agent class.
- */
 #ifndef RVO3D_AGENT_H_
 #define RVO3D_AGENT_H_
+
+/**
+ * @file  Agent.h
+ * @brief Contains the Agent class.
+ */
 
 #include <cstddef>
 #include <utility>
 #include <vector>
 
-#include "RVOSimulator.h"
+#include "Plane.h"
 #include "Vector3.h"
 
 namespace RVO {
-	/**
-	 * \brief   Defines an agent in the simulation.
-	 */
-	class Agent {
-	private:
-		/**
-		 * \brief   Constructs an agent instance.
-		 * \param   sim  The simulator instance.
-		 */
-		explicit Agent(RVOSimulator *sim);
+class RVOSimulator;
 
-		/**
-		 * \brief   Computes the neighbors of this agent.
-		 */
-		void computeNeighbors();
+/**
+ * @brief Defines an agent in the simulation.
+ */
+class Agent {
+ private:
+  /**
+   * @brief     Constructs an agent instance.
+   * @param[in] sim The simulator instance.
+   */
+  explicit Agent(RVOSimulator *sim);
 
-		/**
-		 * \brief   Computes the new velocity of this agent.
-		 */
-		void computeNewVelocity();
+  /**
+   * @brief Destroys this agent instance.
+   */
+  ~Agent();
 
-		/**
-		 * \brief   Inserts an agent neighbor into the set of neighbors of this agent.
-		 * \param   agent    A pointer to the agent to be inserted.
-		 * \param   rangeSq  The squared range around this agent.
-		 */
-		void insertAgentNeighbor(const Agent *agent, float &rangeSq);
+  /**
+   * @brief Computes the neighbors of this agent.
+   */
+  void computeNeighbors();
 
-		/**
-		 * \brief   Updates the three-dimensional position and three-dimensional velocity of this agent.
-		 */
-		void update();
+  /**
+   * @brief Computes the new velocity of this agent.
+   */
+  void computeNewVelocity();
 
-		Vector3 newVelocity_;
-		Vector3 position_;
-		Vector3 prefVelocity_;
-		Vector3 velocity_;
-		RVOSimulator *sim_;
-		size_t id_;
-		size_t maxNeighbors_;
-		float maxSpeed_;
-		float neighborDist_;
-		float radius_;
-		float timeHorizon_;
-		std::vector<std::pair<float, const Agent *> > agentNeighbors_;
-		std::vector<Plane> orcaPlanes_;
+  /**
+   * @brief     Inserts an agent neighbor into the set of neighbors of this
+   *            agent.
+   * @param[in] agent   A pointer to the agent to be inserted.
+   * @param[in] rangeSq The squared range around this agent.
+   */
+  void insertAgentNeighbor(const Agent *agent,
+                           float &rangeSq); /* NOLINT(runtime/references) */
 
-		friend class KdTree;
-		friend class RVOSimulator;
-	};
-}
+  /**
+   * @brief Updates the three-dimensional position and three-dimensional
+   *        velocity of this agent.
+   */
+  void update();
+
+  /* Not implemented. */
+  Agent(const Agent &other);
+
+  /* Not implemented. */
+  Agent &operator=(const Agent &other);
+
+  Vector3 newVelocity_;
+  Vector3 position_;
+  Vector3 prefVelocity_;
+  Vector3 velocity_;
+  RVOSimulator *sim_;
+  std::size_t id_;
+  std::size_t maxNeighbors_;
+  float maxSpeed_;
+  float neighborDist_;
+  float radius_;
+  float timeHorizon_;
+  std::vector<std::pair<float, const Agent *> > agentNeighbors_;
+  std::vector<Plane> orcaPlanes_;
+
+  friend class KdTree;
+  friend class RVOSimulator;
+};
+} /* namespace RVO */
 
 #endif /* RVO3D_AGENT_H_ */

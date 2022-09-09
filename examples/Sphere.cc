@@ -31,7 +31,12 @@
  * <https://gamma.cs.unc.edu/RVO2/>
  */
 
-/* Example file showing a demo with 812 agents initially positioned evenly distributed on a sphere attempting to move to the antipodal position on the sphere. */
+/**
+ * @file  Sphere.cc
+ * @brief Example file showing a demo with 812 agents initially positioned
+ *        evenly distributed on a sphere attempting to move to the antipodal
+ *        position on the sphere.
+ */
 
 #ifndef RVO3D_OUTPUT_TIME_AND_POSITIONS
 #define RVO3D_OUTPUT_TIME_AND_POSITIONS 1
@@ -43,100 +48,103 @@
 
 #if RVO3D_OUTPUT_TIME_AND_POSITIONS
 #include <iostream>
-#endif
+#endif /* RVO3D_OUTPUT_TIME_AND_POSITIONS */
 
 #include <RVO.h>
 
-#ifndef M_PI
-const float M_PI = 3.14159265358979323846f;
-#endif
+namespace {
+const float RVO3D_TWO_PI = 6.28318530717958647692F;
 
-/* Store the goals of the agents. */
-std::vector<RVO::Vector3> goals;
+void setupScenario(
+    RVO::RVOSimulator *sim,
+    std::vector<RVO::Vector3> &goals) { /* NOLINT(runtime/references) */
+  /* Specify the global time step of the simulation. */
+  sim->setTimeStep(0.125F);
 
-void setupScenario(RVO::RVOSimulator *sim)
-{
-	/* Specify the global time step of the simulation. */
-	sim->setTimeStep(0.125f);
+  /* Specify the default parameters for agents that are subsequently added. */
+  sim->setAgentDefaults(15.0F, 10U, 10.0F, 1.5F, 2.0F);
 
-	/* Specify the default parameters for agents that are subsequently added. */
-	sim->setAgentDefaults(15.0f, 10, 10.0f, 1.5f, 2.0f);
+  /* Add agents, specifying their start position, and store their goals on the
+   * opposite side of the environment.
+   */
+  for (std::size_t i = 0U; i < 5.0F * RVO3D_TWO_PI; ++i) {
+    const float z = 100.0F * std::cos(i / 10.0F);
+    const float r = 100.0F * std::sin(i / 10.0F);
 
-	/* Add agents, specifying their start position, and store their goals on the opposite side of the environment. */
-	for (float a = 0; a < M_PI; a += 0.1f) {
-		const float z = 100.0f * std::cos(a);
-		const float r = 100.0f * std::sin(a);
+    for (std::size_t j = 0U; j < r / 2.5F; ++j) {
+      const float x = r * std::cos(j * RVO3D_TWO_PI / (r / 2.5F));
+      const float y = r * std::sin(j * RVO3D_TWO_PI / (r / 2.5F));
 
-		for (size_t i = 0; i < r / 2.5f; ++i) {
-			const float x = r * std::cos(i * 2.0f * M_PI / (r / 2.5f));
-			const float y = r * std::sin(i * 2.0f * M_PI / (r / 2.5f));
-
-			sim->addAgent(RVO::Vector3(x, y, z));
-			goals.push_back(-sim->getAgentPosition(sim->getNumAgents() - 1));
-		}
-	}
+      sim->addAgent(RVO::Vector3(x, y, z));
+      goals.push_back(-sim->getAgentPosition(sim->getNumAgents() - 1U));
+    }
+  }
 }
 
 #if RVO3D_OUTPUT_TIME_AND_POSITIONS
-void updateVisualization(RVO::RVOSimulator *sim)
-{
-	/* Output the current global time. */
-	std::cout << sim->getGlobalTime();
+void updateVisualization(RVO::RVOSimulator *sim) {
+  /* Output the current global time. */
+  std::cout << sim->getGlobalTime();
 
-	/* Output the position for all the agents. */
-	for (size_t i = 0; i < sim->getNumAgents(); ++i) {
-		std::cout << " " << sim->getAgentPosition(i);
-	}
+  /* Output the position for all the agents. */
+  for (std::size_t i = 0U; i < sim->getNumAgents(); ++i) {
+    std::cout << " " << sim->getAgentPosition(i);
+  }
 
-	std::cout << std::endl;
+  std::cout << std::endl;
 }
-#endif
+#endif /* RVO3D_OUTPUT_TIME_AND_POSITIONS */
+} /* namespace */
 
-void setPreferredVelocities(RVO::RVOSimulator *sim)
-{
-	/* Set the preferred velocity to be a vector of unit magnitude (speed) in the direction of the goal. */
-	for (size_t i = 0; i < sim->getNumAgents(); ++i) {
-		RVO::Vector3 goalVector = goals[i] - sim->getAgentPosition(i);
+void setPreferredVelocities(RVO::RVOSimulator *sim,
+                            const std::vector<RVO::Vector3> &goals) {
+  /* Set the preferred velocity to be a vector of unit magnitude (speed) in the
+   * direction of the goal.
+   */
+  for (std::size_t i = 0U; i < sim->getNumAgents(); ++i) {
+    RVO::Vector3 goalVector = goals[i] - sim->getAgentPosition(i);
 
-		if (RVO::absSq(goalVector) > 1.0f) {
-			goalVector = RVO::normalize(goalVector);
-		}
+    if (RVO::absSq(goalVector) > 1.0F) {
+      goalVector = RVO::normalize(goalVector);
+    }
 
-		sim->setAgentPrefVelocity(i, goalVector);
-	}
-}
-
-bool reachedGoal(RVO::RVOSimulator *sim)
-{
-	/* Check if all agents have reached their goals. */
-	for (size_t i = 0; i < sim->getNumAgents(); ++i) {
-		if (RVO::absSq(sim->getAgentPosition(i) - goals[i]) > 4.0f * sim->getAgentRadius(i) * sim->getAgentRadius(i)) {
-			return false;
-		}
-	}
-
-	return true;
+    sim->setAgentPrefVelocity(i, goalVector);
+  }
 }
 
-int main()
-{
-	/* Create a new simulator instance. */
-	RVO::RVOSimulator *sim = new RVO::RVOSimulator();
+bool reachedGoal(RVO::RVOSimulator *sim,
+                 const std::vector<RVO::Vector3> &goals) {
+  /* Check if all agents have reached their goals. */
+  for (std::size_t i = 0U; i < sim->getNumAgents(); ++i) {
+    if (RVO::absSq(sim->getAgentPosition(i) - goals[i]) >
+        4.0F * sim->getAgentRadius(i) * sim->getAgentRadius(i)) {
+      return false;
+    }
+  }
 
-	/* Set up the scenario. */
-	setupScenario(sim);
+  return true;
+}
 
-	/* Perform (and manipulate) the simulation. */
-	do {
+int main() {
+  /* Create a new simulator instance. */
+  RVO::RVOSimulator *sim = new RVO::RVOSimulator();
+
+  /* Store the goals of the agents. */
+  std::vector<RVO::Vector3> goals;
+
+  /* Set up the scenario. */
+  setupScenario(sim, goals);
+
+  /* Perform (and manipulate) the simulation. */
+  do {
 #if RVO3D_OUTPUT_TIME_AND_POSITIONS
-		updateVisualization(sim);
-#endif
-		setPreferredVelocities(sim);
-		sim->doStep();
-	}
-	while (!reachedGoal(sim));
+    updateVisualization(sim);
+#endif /* RVO3D_OUTPUT_TIME_AND_POSITIONS */
+    setPreferredVelocities(sim, goals);
+    sim->doStep();
+  } while (!reachedGoal(sim, goals));
 
-	delete sim;
+  delete sim;
 
-	return 0;
+  return 0;
 }
