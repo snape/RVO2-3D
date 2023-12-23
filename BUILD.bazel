@@ -170,6 +170,7 @@ pkg_deb(
     package = "rvo3d",
     priority = "optional",
     section = "libdevel",
+    triggers = "triggers",
     version = "1.1.0",
     visibility = ["//visibility:private"],
 )
