@@ -38,7 +38,7 @@ includedir=${prefix}/@RVO3D_INCLUDE_DIR@
 
 Name: @RVO3D_NAME@
 Description: @PROJECT_DESCRIPTION@
-URL: @RVO3D_HOMEPAGE_URL@
+URL: @PROJECT_HOMEPAGE_URL@
 Version: @PROJECT_VERSION@
 Libs: -L${libdir} -l@RVO3D_LIBRARY@
 Cflags: -I${includedir}
