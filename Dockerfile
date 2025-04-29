@@ -42,10 +42,10 @@ LABEL org.opencontainers.image.source="https://github.com/snape/RVO2-3D/"
 LABEL org.opencontainers.image.title="RVO2-3D Library"
 LABEL org.opencontainers.image.url="https://gamma.cs.unc.edu/RVO2/"
 LABEL org.opencontainers.image.vendor="University of North Carolina at Chapel Hill"
-ENV LANG C.UTF-8
-ENV LOGNAME root
-ENV SHELL /bin/bash
-ENV USER root
+LABEL org.opencontainers.image.version="1.1.0"
+ENV LANG=C.UTF-8
+ENV LOGNAME=root
+ENV USER=root
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update -qq \
   && apt-get install --no-install-recommends -o Dpkg::Use-Pty=0 -qy \
@@ -63,9 +63,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     g++ \
     gdb \
     git \
+    gnupg \
     graphviz \
     iwyu \
     jsonlint \
+    lcov \
     lldb \
     make \
     markdownlint \
@@ -73,13 +75,38 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     netbase \
     ninja-build \
     npm \
+    openssh-client \
     pkgconf \
     python3 \
+    python3-click \
+    python3-dateutil \
+    python3-docopt \
+    python3-jsonschema \
+    python3-pip \
+    python3-pykwalify \
+    python3-requests \
+    python3-ruamel.yaml \
+    python3-venv \
     reuse \
     strace \
+    sudo \
     valgrind \
     yamllint \
   && rm -rf /var/lib/apt/lists/* \
   && npm install -g \
     @bazel/bazelisk \
-    @bazel/buildifier
+    @bazel/buildifier \
+    @bazel/buildozer \
+  && python3 -m venv --system-site-packages /home/ubuntu/.venv \
+  && . /home/ubuntu/.venv/bin/activate \
+  && pip install --no-cache-dir -qq \
+    cffconvert \
+  && echo "ubuntu ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu \
+  && chmod 0440 /etc/sudoers.d/ubuntu
+ENV LOGNAME=ubuntu
+ENV PATH="/home/ubuntu/.venv/bin:$PATH"
+ENV SHELL=/bin/bash
+ENV USER=ubuntu
+ENV VIRTUAL_ENV=/home/ubuntu/.venv
+USER ubuntu
+WORKDIR /workspace

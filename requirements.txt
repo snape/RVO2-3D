@@ -33,5 +33,5 @@
 
 cffconvert
 cmakelang
-reuse
 cpplint
+reuse
