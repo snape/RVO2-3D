@@ -251,7 +251,7 @@ jobs:
   cmake_fedora:
     name: cmake fedora 42
     runs-on: ubuntu-latest
-    container: fedora:42
+    container: fedora:43
     steps:
       - name: setup
         run: |
