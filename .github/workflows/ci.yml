@@ -66,12 +66,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: build test package
-        run: bazel test --enable_bzlmod=0 --flaky_test_attempts=3 ...
+        run: bazel test --flaky_test_attempts=3 ...
         shell: bash
 
   bazel_macos:
-    name: bazel macos 14
-    runs-on: macos-14
+    name: bazel macos 15
+    runs-on: macos-15
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
         run: |
           brew update -q
           brew upgrade -f -q
-          brew bundle install -q --no-lock
+          brew bundle install -q
           brew cleanup -q -s
           rm -rf $(brew --cache)
         env:
@@ -88,13 +88,45 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
         shell: zsh -efuo pipefail {0}
       - name: build test package
-        run: bazel test --enable_bzlmod=0 --flaky_test_attempts=3 ...
+        run: bazel test --flaky_test_attempts=3 ...
         shell: zsh -efuo pipefail {0}
 
-  bazel_ubuntu:
-    name: bazel ubuntu latest
+  bazel_ubuntu_arm64:
+    name: bazel ubuntu arm64 24.04
+    runs-on: ubuntu-24.04-arm
+    container: ubuntu:24.04
+    steps:
+      - name: setup
+        run: |
+          apt-get -qq -o APT::Acquire::Retries=4 update \
+            || (sleep 15; apt-get -qq -o APT::Acquire::Retries=4 update)
+          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
+            upgrade
+          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
+              --no-install-recommends install \
+            ca-certificates \
+            g++ \
+            git \
+            python-is-python3 \
+            wget
+          apt-get -qq -o Dpkg::Use-Pty=0 autoremove
+          rm -rf /var/lib/apt/lists/*
+          wget -q https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-arm64.deb
+          dpkg -i bazelisk-arm64.deb
+          rm -rf bazelisk-arm64.deb
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        shell: bash
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build test package
+        run: bazel test --flaky_test_attempts=3 ...
+        shell: bash
+
+  bazel_ubuntu_x64:
+    name: bazel ubuntu x64 24.04
     runs-on: ubuntu-latest
-    container: ubuntu:latest
+    container: ubuntu:24.04
     steps:
       - name: setup
         run: |
@@ -127,98 +159,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: build test package
-        run: bazel test --enable_bzlmod=0 --flaky_test_attempts=3 ...
-        shell: bash
-
-  bzlmod_arch:
-    name: bzlmod arch latest
-    runs-on: ubuntu-latest
-    container: archlinux:latest
-    steps:
-      - name: setup
-        run: |
-          pacman --needed --noconfirm --noprogressbar -S -u -y \
-            bazel \
-            ca-certificates \
-            gcc \
-            git \
-            python \
-            which
-          rm -rf \
-            /var/cache/pacman/pkg/* \
-            /var/lib/pacman/sync/*
-        shell: bash
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: build test package
-        run: bazel test --enable_bzlmod=1 --flaky_test_attempts=3 ...
-        shell: bash
-
-  bzlmod_macos:
-    name: bzlmod macos 14
-    runs-on: macos-14
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: setup
-        run: |
-          brew update -q
-          brew upgrade -f -q
-          brew bundle install -q --no-lock
-          brew cleanup -q -s
-          rm -rf $(brew --cache)
-        env:
-          HOMEBREW_NO_ANALYTICS: 1
-          HOMEBREW_NO_AUTO_UPDATE: 1
-          HOMEBREW_NO_INSTALL_CLEANUP: 1
-        shell: zsh -efuo pipefail {0}
-      - name: build test package
-        run: bazel test --enable_bzlmod=1 --flaky_test_attempts=3 ...
-        shell: zsh -efuo pipefail {0}
-
-  bzlmod_ubuntu:
-    name: bzlmod ubuntu latest
-    runs-on: ubuntu-latest
-    container: ubuntu:latest
-    steps:
-      - name: setup
-        run: |
-          apt-get -qq -o APT::Acquire::Retries=4 update \
-            || (sleep 15; apt-get -qq -o APT::Acquire::Retries=4 update)
-          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
-            upgrade
-          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
-              --no-install-recommends install \
-            ca-certificates \
-            g++ \
-            git \
-            gnupg \
-            python-is-python3 \
-            wget
-          wget -qO - https://bazel.build/bazel-release.pub.gpg 2>/dev/null \
-            | gpg --dearmor - > /usr/share/keyrings/bazel-archive-keyring.gpg
-          echo 'deb [signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8' \
-            > /etc/apt/sources.list.d/bazel.list
-          apt-get -qq -o APT::Acquire::Retries=4 update \
-            || (sleep 15; apt-get -qq -o APT::Acquire::Retries=4 update)
-          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
-              --no-install-recommends install \
-            bazel
-          apt-get -qq -o Dpkg::Use-Pty=0 autoremove
-          rm -rf /var/lib/apt/lists/*
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        shell: bash
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: build test package
-        run: bazel test --enable_bzlmod=1 --flaky_test_attempts=3 ...
+        run: bazel test --flaky_test_attempts=3 ...
         shell: bash
 
   cmake_alpine:
-    name: cmake alpine latest
+    name: cmake alpine 3
     runs-on: ubuntu-latest
-    container: alpine:latest
+    container: alpine:3
     steps:
       - name: setup
         run: |
@@ -302,9 +249,9 @@ jobs:
         shell: bash
 
   cmake_fedora:
-    name: cmake fedora latest
+    name: cmake fedora 42
     runs-on: ubuntu-latest
-    container: fedora:latest
+    container: fedora:42
     steps:
       - name: setup
         run: |
@@ -349,8 +296,8 @@ jobs:
         shell: bash
 
   cmake_macos:
-    name: cmake macos 14
-    runs-on: macos-14
+    name: cmake macos 15
+    runs-on: macos-15
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -358,7 +305,7 @@ jobs:
         run: |
           brew update -q
           brew upgrade -f -q
-          brew bundle install -q --no-lock
+          brew bundle install -q
           brew cleanup -q -s
           rm -rf $(brew --cache)
         env:
@@ -387,6 +334,51 @@ jobs:
           cpack -G TGZ
           cpack -G TGZ --config CPackSourceConfig.cmake
         shell: zsh -efuo pipefail {0}
+
+  cmake_opensuse:
+    name: cmake opensuse tumbleweed latest
+    runs-on: ubuntu-latest
+    container: opensuse/tumbleweed:latest
+    steps:
+      - name: setup
+        run: |
+          zypper -n -q ref || (sleep 15; zypper -n -q ref)
+          zypper -n -q up
+          zypper -n -q in --no-recommends \
+            ca-certificates \
+            cmake \
+            doxygen \
+            gcc-c++ \
+            git \
+            graphviz \
+            make \
+            pkgconf \
+            rpm-build
+          zypper -n -q cc -a
+        shell: bash
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build test package
+        run: |
+          mkdir _build
+          cd _build
+          cmake \
+            -DBUILD_DOCUMENTATION:BOOL=ON \
+            -DBUILD_TESTING:BOOL=ON \
+            -DCMAKE_INSTALL_PREFIX:PATH=install \
+            -DENABLE_HARDENING:BOOL=ON \
+            -DENABLE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON \
+            -DENABLE_OPENMP:BOOL=ON \
+            -DOUTPUT_TIME_AND_POSITIONS:BOOL=OFF \
+            -DWARNINGS_AS_ERRORS:BOOL=ON \
+            --warn-uninitialized \
+            ..
+          cmake --build .
+          ctest . --repeat after-timeout:3
+          cmake --install .
+          cpack -G RPM
+          cpack -G RPM --config CPackSourceConfig.cmake
+        shell: bash
 
   cmake_rockylinux:
     name: cmake rockylinux 9
@@ -437,10 +429,62 @@ jobs:
           cpack -G RPM --config CPackSourceConfig.cmake
         shell: bash
 
-  cmake_ubuntu:
-    name: cmake ubuntu latest
+  cmake_ubuntu_arm64:
+    name: cmake ubuntu arm64 24.04
+    runs-on: ubuntu-24.04-arm
+    container: ubuntu:24.04
+    steps:
+      - name: setup
+        run: |
+          apt-get -qq -o APT::Acquire::Retries=4 update \
+            || (sleep 15; apt-get -qq -o APT::Acquire::Retries=4 update)
+          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
+            upgrade
+          apt-get -qq -o APT::Acquire::Retries=4 -o Dpkg::Use-Pty=0 \
+              --no-install-recommends install \
+            ca-certificates \
+            cmake \
+            doxygen \
+            dpkg-dev \
+            file \
+            g++ \
+            git \
+            graphviz \
+            make \
+            pkgconf
+          apt-get -qq -o Dpkg::Use-Pty=0 autoremove
+          rm -rf /var/lib/apt/lists/*
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        shell: bash
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build test package
+        run: |
+          mkdir _build
+          cd _build
+          cmake \
+            -DBUILD_DOCUMENTATION:BOOL=ON \
+            -DBUILD_TESTING:BOOL=ON \
+            -DCMAKE_INSTALL_PREFIX:PATH=install \
+            -DENABLE_HARDENING:BOOL=ON \
+            -DENABLE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON \
+            -DENABLE_OPENMP:BOOL=ON \
+            -DOUTPUT_TIME_AND_POSITIONS:BOOL=OFF \
+            -DWARNINGS_AS_ERRORS:BOOL=ON \
+            --warn-uninitialized \
+            ..
+          cmake --build .
+          ctest . --repeat after-timeout:3
+          cmake --install .
+          cpack -G DEB
+          cpack -G DEB --config CPackSourceConfig.cmake
+        shell: bash
+
+  cmake_ubuntu_x64:
+    name: cmake ubuntu x64 24.04
     runs-on: ubuntu-latest
-    container: ubuntu:latest
+    container: ubuntu:24.04
     steps:
       - name: setup
         run: |

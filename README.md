@@ -82,7 +82,6 @@ manipulable during runtime. The library exploits multiple processors if they are
 available using OpenMP for efficient parallelization of the simulation.
 
 ![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=main)
-[![Build Status](https://circleci.com/gh/snape/RVO2-3D/tree/main.svg?style=svg)](https://circleci.com/gh/snape/RVO2-3D/?branch=main)
 
 <!-- REUSE-IgnoreStart -->
 SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
