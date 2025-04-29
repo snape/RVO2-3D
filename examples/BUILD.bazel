@@ -36,9 +36,10 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
-package(default_applicable_licenses = ["//:license"])
-
-licenses(["notice"])  # Apache-2.0
+package(default_package_metadata = [
+    "//:license",
+    "//:package_info",
+])
 
 cc_test(
     name = "Sphere",
@@ -47,6 +48,5 @@ cc_test(
     srcs = ["Sphere.cc"],
     defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
     tags = ["block-network"],
-    visibility = ["//visibility:private"],
     deps = ["//src:RVO3D"],
 )
