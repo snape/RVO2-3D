@@ -33,7 +33,8 @@
 # <https://gamma.cs.unc.edu/RVO2/>
 #
 
-FROM ubuntu:latest
+FROM ubuntu:24.04
+ARG TARGETARCH
 LABEL org.opencontainers.image.authors="Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, Dinesh Manocha"
 LABEL org.opencontainers.image.base.name="docker.io/library/ubuntu:latest"
 LABEL org.opencontainers.image.description="Optimal Reciprocal Collision Avoidance in Three Dimensions"
@@ -74,7 +75,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     nano \
     netbase \
     ninja-build \
-    npm \
     openssh-client \
     pkgconf \
     python3 \
@@ -93,10 +93,16 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     valgrind \
     yamllint \
   && rm -rf /var/lib/apt/lists/* \
-  && npm install -g \
-    @bazel/bazelisk \
-    @bazel/buildifier \
-    @bazel/buildozer \
+  && wget -q https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-${TARGETARCH:-amd64}.deb \
+  && dpkg -i bazelisk-${TARGETARCH:-amd64}.deb \
+  && rm -rf bazelisk-${TARGETARCH:-amd64}.deb \
+  && wget -qO /usr/local/bin/buildifier \
+    https://github.com/bazelbuild/buildtools/releases/latest/download/buildifier-linux-${TARGETARCH:-amd64} \
+  && wget -qO /usr/local/bin/buildozer \
+    https://github.com/bazelbuild/buildtools/releases/latest/download/buildozer-linux-${TARGETARCH:-amd64} \
+  && chmod +x \
+    /usr/local/bin/buildifier \
+    /usr/local/bin/buildozer \
   && python3 -m venv --system-site-packages /home/ubuntu/.venv \
   && . /home/ubuntu/.venv/bin/activate \
   && pip install --no-cache-dir -qq \
@@ -104,7 +110,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && echo "ubuntu ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu \
   && chmod 0440 /etc/sudoers.d/ubuntu
 ENV LOGNAME=ubuntu
-ENV PATH="/home/ubuntu/.venv/bin:$PATH"
+ENV PATH="/home/ubuntu/.venv/bin:${PATH}"
 ENV SHELL=/bin/bash
 ENV USER=ubuntu
 ENV VIRTUAL_ENV=/home/ubuntu/.venv
