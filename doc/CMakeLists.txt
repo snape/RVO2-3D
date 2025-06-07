@@ -60,6 +60,7 @@ if(BUILD_DOCUMENTATION AND Doxygen_FOUND)
 
   doxygen_add_docs(documentation
     "${PROJECT_BINARY_DIR}/src/Export.h"
+    "${PROJECT_SOURCE_DIR}/src/Plane.h"
     "${PROJECT_SOURCE_DIR}/src/RVO.h"
     "${PROJECT_SOURCE_DIR}/src/RVOSimulator.h"
     "${PROJECT_SOURCE_DIR}/src/Vector3.h"
