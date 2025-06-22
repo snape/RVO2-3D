@@ -84,7 +84,7 @@ available using OpenMP for efficient parallelization of the simulation.
 ![Build Status](https://github.com/snape/RVO2-3D/workflows/ci/badge.svg?branch=main)
 
 <!-- REUSE-IgnoreStart -->
-SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill
+SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill  
 SPDX-License-Identifier: Apache-2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
