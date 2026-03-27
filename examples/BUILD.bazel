@@ -46,6 +46,13 @@ cc_test(
     size = "medium",
     timeout = "short",
     srcs = ["Sphere.cc"],
+    copts = select({
+        "@platforms//os:windows": ["/W4"],
+        "//conditions:default": [
+            "-Wall",
+            "-Werror=format-security",
+        ],
+    }),
     defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
     tags = ["block-network"],
     deps = ["//src:RVO3D"],

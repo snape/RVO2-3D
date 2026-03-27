@@ -75,6 +75,7 @@ pkg_files(
 
 cc_shared_library(
     name = "RVO3D",
+    visibility = ["//visibility:public"],
     deps = ["//src:RVO3D"],
 )
 
@@ -101,7 +102,7 @@ cat << 'EOF' > $@
     }
   },
   "cps_path": "@prefix@/lib/cps/RVO3D",
-  "cps_version": "0.13.0",
+  "cps_version": "0.14.1",
   "default_components": ["RVO3D"],
   "description": "Optimal Reciprocal Collision Avoidance in Three Dimensions",
   "license": "Apache-2.0",
@@ -114,9 +115,64 @@ EOF
 """,
 )
 
+genrule(
+    name = "rvo3d_release_cps",
+    outs = ["RVO3D@release.cps"],
+    cmd = select({
+        "@platforms//os:macos": """
+cat << 'EOF' > $@
+{
+  "components":
+  {
+    "RVO3D":
+    {
+      "location": "@prefix@/lib/libRVO3D.dylib"
+    }
+  },
+  "configuration": "Release",
+  "name": "RVO3D"
+}
+EOF
+""",
+        "@platforms//os:windows": """
+cat << 'EOF' > $@
+{
+  "components":
+  {
+    "RVO3D":
+    {
+      "location": "@prefix@/lib/RVO3D.dll"
+    }
+  },
+  "configuration": "Release",
+  "name": "RVO3D"
+}
+EOF
+""",
+        "//conditions:default": """
+cat << 'EOF' > $@
+{
+  "components":
+  {
+    "RVO3D":
+    {
+      "location": "@prefix@/lib/libRVO3D.so"
+    }
+  },
+  "configuration": "Release",
+  "name": "RVO3D"
+}
+EOF
+""",
+    }),
+)
+
 pkg_files(
     name = "cps",
-    srcs = ["RVO3D.cps"],
+    srcs = [
+        "RVO3D.cps",
+        "RVO3D@release.cps",
+    ],
     attributes = pkg_attributes(mode = "0644"),
     prefix = "usr/lib/cps/RVO3D",
 )
@@ -197,11 +253,13 @@ pkg_tar(
 
 pkg_deb(
     name = "deb",
-    architecture = select({
-        "@platforms//cpu:arm": "amd64",
-        "@platforms//os:macos": "arm64",
-        "//conditions:default": "all",
-    }),
+    architecture = select(
+        {
+            "@platforms//cpu:aarch64": "arm64",
+            "@platforms//cpu:x86_64": "amd64",
+        },
+        no_match_error = "Unsupported CPU for //:deb. Supported CPUs: aarch64, x86_64.",
+    ),
     data = ":tar",
     depends = [
         "libc6",
@@ -215,6 +273,7 @@ pkg_deb(
     package = "rvo3d",
     priority = "optional",
     section = "contrib/libdevel",
+    target_compatible_with = ["@platforms//os:linux"],
     triggers = "triggers",
     version = "1.1.0",
 )
