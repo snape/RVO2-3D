@@ -57,6 +57,7 @@
 *.md                 text diff=markdown whitespace-md
 *.pc.in              text whitespace-2
 *.txt                text
+*.xml                text
 *.yaml               text whitespace-2
 *.yml                text whitespace-2
 
