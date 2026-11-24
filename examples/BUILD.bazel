@@ -47,13 +47,75 @@ cc_test(
     timeout = "short",
     srcs = ["Sphere.cc"],
     copts = select({
-        "@platforms//os:windows": ["/W4"],
-        "//conditions:default": [
+        "//conditions:linux_aarch64": [
             "-Wall",
+            "-fno-common",
+            "-fstack-clash-protection",
+            "-fstack-protector-strong",
+            "-mbranch-protection=standard",
+            "-std=c++98",
+            "-Werror=conversion",
             "-Werror=format-security",
         ],
+        "//conditions:linux_x86_64": [
+            "-Wall",
+            "-fcf-protection=full",
+            "-fno-common",
+            "-fstack-clash-protection",
+            "-fstack-protector-strong",
+            "-std=c++98",
+            "-Werror=conversion",
+            "-Werror=format-security",
+        ],
+        "@platforms//os:linux": [
+            "-Wall",
+            "-fno-common",
+            "-fstack-clash-protection",
+            "-fstack-protector-strong",
+            "-std=c++98",
+            "-Werror=conversion",
+            "-Werror=format-security",
+        ],
+        "@platforms//os:macos": [
+            "-Wall",
+            "-fno-common",
+            "-fstack-protector-strong",
+            "-std=c++98",
+            "-Werror=conversion",
+            "-Werror=format-security",
+        ],
+        "@platforms//os:windows": [
+            "/guard:cf",
+            "/guard:ehcont",
+            "/Qspectre",
+            "/sdl",
+            "/W4",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "//conditions:linux_opt": [
+            "-U_FORTIFY_SOURCE",
+            "-D_FORTIFY_SOURCE=3",
+        ],
+        "//conditions:default": [],
     }),
-    defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"],
+    defines = ["RVO3D_OUTPUT_TIME_AND_POSITIONS=0"] + select({
+        "//conditions:macos_opt": ["_FORTIFY_SOURCE=3"],
+        "//conditions:default": [],
+    }),
+    dynamic_deps = select({
+        "@platforms//os:windows": ["//:RVO3D"],
+        "//conditions:default": [],
+    }),
+    linkopts = select({
+        "@platforms//os:linux": [
+            "-Wl,-z,defs",
+            "-Wl,-z,noexecstack",
+            "-Wl,-z,now",
+            "-Wl,-z,relro",
+        ],
+        "//conditions:default": [],
+    }),
     tags = ["block-network"],
     deps = ["//src:RVO3D"],
 )

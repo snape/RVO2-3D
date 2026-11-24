@@ -119,9 +119,11 @@ CI is performed via GitHub Actions on every push and pull request to `main`,
 and on a daily schedule:
 
 - [`.github/workflows/ci.yml`](.github/workflows/ci.yml): builds and tests
-  with both CMake and Bazel on AlmaLinux, Alpine, Arch Linux, Fedora,
-  openSUSE, and Ubuntu (amd64 and arm64), and macOS (arm64). CMake builds
-  enable `BUILD_TESTING`, `ENABLE_HARDENING`, `ENABLE_OPENMP`, and
+  with CMake and Bazel on AlmaLinux, Arch Linux, Fedora, openSUSE, Ubuntu
+  (amd64 and arm64), macOS (arm64), and Windows (amd64 and arm64),
+  and with CMake on Alpine Linux (amd64). CMake builds
+  enable `BUILD_TESTING`, `ENABLE_HARDENING`,
+  `ENABLE_INTERPROCEDURAL_OPTIMIZATION`, `ENABLE_OPENMP` (on Linux), and
   `WARNINGS_AS_ERRORS`.
 - [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml): runs GitHub
   CodeQL semantic code analysis for C++ on a weekly schedule.
@@ -249,15 +251,16 @@ None.
 `RVO2-3D Library` is built and tested continuously via GitHub Actions on the
 following platforms:
 
-| Platform       | Architecture | Build System |
-|----------------|--------------|--------------|
-| AlmaLinux 10   | amd64        | CMake, Bazel |
-| Alpine Linux   | amd64        | CMake, Bazel |
-| Arch Linux     | amd64        | CMake, Bazel |
-| Fedora         | amd64        | CMake, Bazel |
-| openSUSE Leap  | amd64        | CMake, Bazel |
-| Ubuntu         | amd64, arm64 | CMake, Bazel |
-| macOS          | arm64        | CMake, Bazel |
+| Platform       | Architecture  | Build System |
+|----------------|---------------|--------------|
+| AlmaLinux      | amd64         | CMake, Bazel |
+| Alpine Linux   | amd64         | CMake        |
+| Arch Linux     | amd64         | CMake, Bazel |
+| Fedora         | amd64         | CMake, Bazel |
+| openSUSE Leap  | amd64         | CMake, Bazel |
+| Ubuntu         | amd64, arm64  | CMake, Bazel |
+| macOS          | arm64         | CMake, Bazel |
+| Windows        | amd64, arm64  | CMake, Bazel |
 
 ## Security [7]
 
