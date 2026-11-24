@@ -38,7 +38,7 @@ load("@rules_cc//cc:defs.bzl", "cc_shared_library")
 load("@rules_license//rules:license.bzl", "license")
 load("@rules_license//rules:package_info.bzl", "package_info")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_files")
-load("@rules_pkg//pkg:pkg.bzl", "pkg_deb", "pkg_tar")
+load("@rules_pkg//pkg:pkg.bzl", "pkg_deb", "pkg_tar", "pkg_zip")
 
 package(default_package_metadata = [
     ":license",
@@ -84,97 +84,6 @@ pkg_files(
     srcs = [":RVO3D"],
     attributes = pkg_attributes(mode = "0644"),
     prefix = "usr/lib",
-)
-
-genrule(
-    name = "rvo3d_cps",
-    outs = ["RVO3D.cps"],
-    cmd = """
-cat << 'EOF' > $@
-{
-  "compat_version": "1",
-  "components":
-  {
-    "RVO3D":
-    {
-      "includes": ["@prefix@/include/RVO3D"],
-      "type": "dylib"
-    }
-  },
-  "cps_path": "@prefix@/lib/cps/RVO3D",
-  "cps_version": "0.14.1",
-  "default_components": ["RVO3D"],
-  "description": "Optimal Reciprocal Collision Avoidance in Three Dimensions",
-  "license": "Apache-2.0",
-  "name": "RVO3D",
-  "version": "1.1.0",
-  "version_schema": "simple",
-  "website": "https://gamma.cs.unc.edu/RVO2/"
-}
-EOF
-""",
-)
-
-genrule(
-    name = "rvo3d_release_cps",
-    outs = ["RVO3D@release.cps"],
-    cmd = select({
-        "@platforms//os:macos": """
-cat << 'EOF' > $@
-{
-  "components":
-  {
-    "RVO3D":
-    {
-      "location": "@prefix@/lib/libRVO3D.dylib"
-    }
-  },
-  "configuration": "Release",
-  "name": "RVO3D"
-}
-EOF
-""",
-        "@platforms//os:windows": """
-cat << 'EOF' > $@
-{
-  "components":
-  {
-    "RVO3D":
-    {
-      "location": "@prefix@/lib/RVO3D.dll"
-    }
-  },
-  "configuration": "Release",
-  "name": "RVO3D"
-}
-EOF
-""",
-        "//conditions:default": """
-cat << 'EOF' > $@
-{
-  "components":
-  {
-    "RVO3D":
-    {
-      "location": "@prefix@/lib/libRVO3D.so"
-    }
-  },
-  "configuration": "Release",
-  "name": "RVO3D"
-}
-EOF
-""",
-    }),
-)
-
-pkg_files(
-    name = "cps",
-    srcs = [
-        "RVO3D.cps",
-        "RVO3D@release.cps",
-    ],
-    attributes = pkg_attributes(mode = "0644"),
-    prefix = "usr/lib/cps/RVO3D",
 )
 
 # REUSE-IgnoreStart
@@ -229,6 +138,10 @@ Libs: -L$${libdir} -lRVO3D
 Cflags: -I$${includedir}
 EOF
 """,
+    target_compatible_with = select({
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
 )
 # REUSE-IgnoreEnd
 
@@ -237,18 +150,25 @@ pkg_files(
     srcs = ["RVO3D.pc"],
     attributes = pkg_attributes(mode = "0644"),
     prefix = "usr/lib/pkgconfig",
+    target_compatible_with = select({
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
 )
 
 pkg_tar(
     name = "tar",
     srcs = [
-        ":cps",
         ":doc",
         ":lib",
         ":pkgconfig",
         "//src:include",
     ],
     extension = "tar.gz",
+    target_compatible_with = select({
+        "@platforms//os:windows": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
 )
 
 pkg_deb(
@@ -276,4 +196,35 @@ pkg_deb(
     target_compatible_with = ["@platforms//os:linux"],
     triggers = "triggers",
     version = "1.1.0",
+)
+
+filegroup(
+    name = "implib",
+    srcs = [":RVO3D"],
+    output_group = "interface_library",
+    target_compatible_with = ["@platforms//os:windows"],
+)
+
+pkg_files(
+    name = "lib_windows",
+    srcs = [
+        ":RVO3D",
+        ":implib",
+    ],
+    attributes = pkg_attributes(mode = "0644"),
+    prefix = "usr/lib",
+    target_compatible_with = ["@platforms//os:windows"],
+)
+
+pkg_zip(
+    name = "zip",
+    srcs = [
+        ":doc",
+        ":lib_windows",
+        "//src:include",
+    ],
+    target_compatible_with = select({
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
 )

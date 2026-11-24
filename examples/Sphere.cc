@@ -67,13 +67,13 @@ void setupScenario(
   /* Add agents, specifying their start position, and store their goals on the
    * opposite side of the environment.
    */
-  for (std::size_t i = 0U; i < 5.0F * RVO3D_TWO_PI; ++i) {
-    const float z = 100.0F * std::cos(i / 10.0F);
-    const float r = 100.0F * std::sin(i / 10.0F);
+  for (std::size_t i = 0U; static_cast<float>(i) < 5.0F * RVO3D_TWO_PI; ++i) {
+    const float z = 100.0F * std::cos(static_cast<float>(i) / 10.0F);
+    const float r = 100.0F * std::sin(static_cast<float>(i) / 10.0F);
 
-    for (std::size_t j = 0U; j < r / 2.5F; ++j) {
-      const float x = r * std::cos(j * RVO3D_TWO_PI / (r / 2.5F));
-      const float y = r * std::sin(j * RVO3D_TWO_PI / (r / 2.5F));
+    for (std::size_t j = 0U; static_cast<float>(j) < r / 2.5F; ++j) {
+      const float x = r * std::cos(static_cast<float>(j) * RVO3D_TWO_PI / (r / 2.5F));
+      const float y = r * std::sin(static_cast<float>(j) * RVO3D_TWO_PI / (r / 2.5F));
 
       sim->addAgent(RVO::Vector3(x, y, z));
       goals.push_back(-sim->getAgentPosition(sim->getNumAgents() - 1U));

@@ -148,7 +148,7 @@ void RVOSimulator::doStep() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif /* _OPENMP */
-  for (int i = 0; i < static_cast<int>(agents_.size()); ++i) {
+  for (std::size_t i = 0U; i < agents_.size(); ++i) {
     agents_[i]->computeNeighbors();
     agents_[i]->computeNewVelocity();
   }
@@ -156,7 +156,7 @@ void RVOSimulator::doStep() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif /* _OPENMP */
-  for (int i = 0; i < static_cast<int>(agents_.size()); ++i) {
+  for (std::size_t i = 0U; i < agents_.size(); ++i) {
     agents_[i]->update();
   }
 
