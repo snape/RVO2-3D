@@ -81,7 +81,8 @@ via a simple call to the library. The simulation is fully accessible and
 manipulable during runtime. The library exploits multiple processors if they are
 available using OpenMP for efficient parallelization of the simulation.
 
-![Build Status](https://github.com/snape/RVO2-3D/actions/workflows/ci.yml/badge.svg?branch=main)
+![Bazel](https://github.com/snape/RVO2-3D/actions/workflows/bazel.yml/badge.svg?branch=main)
+![CMake](https://github.com/snape/RVO2-3D/actions/workflows/cmake.yml/badge.svg?branch=main)
 
 <!-- REUSE-IgnoreStart -->
 SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill  
