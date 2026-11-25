@@ -54,6 +54,7 @@
 *.imp                text linguist-language=json whitespace-2
 *.json               text whitespace-2
 *.license            text linguist-documentation whitespace-0
+*.lock               text linguist-generated
 *.md                 text diff=markdown whitespace-md
 *.pc.in              text whitespace-2
 *.txt                text
@@ -71,6 +72,7 @@
 .gitattributes       text export-ignore whitespace-2
 .gitignore           text export-ignore whitespace-2
 .zenodo.json         export-ignore linguist-documentation
+actions.lock         linguist-language=YAML whitespace-4
 Brewfile             text diff=ruby export-ignore whitespace-4
 CMakeLists.txt       whitespace-2
 CODEOWNERS           text whitespace-2
