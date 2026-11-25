@@ -83,11 +83,11 @@ jobs:
           echo "gcc=$(gcc -dumpfullversion -dumpversion)" >> "$GITHUB_OUTPUT"
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -131,11 +131,11 @@ jobs:
           echo "gcc=$(gcc -dumpfullversion -dumpversion)" >> "$GITHUB_OUTPUT"
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -180,11 +180,11 @@ jobs:
           echo "gcc=$(gcc -dumpfullversion -dumpversion)" >> "$GITHUB_OUTPUT"
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -217,11 +217,11 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
         shell: zsh -efuo pipefail {0}
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/Library/Caches/bazel
@@ -266,11 +266,11 @@ jobs:
           echo "gcc=$(gcc -dumpfullversion -dumpversion)" >> "$GITHUB_OUTPUT"
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -319,11 +319,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -372,11 +372,11 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         shell: bash
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cache/bazel
@@ -450,11 +450,11 @@ jobs:
             [System.Environment]::GetEnvironmentVariable("Path", "User"))
         shell: pwsh
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~\AppData\Local\bazel-cache
@@ -529,11 +529,11 @@ jobs:
           Add-Content $env:GITHUB_PATH (Join-Path $env:LOCALAPPDATA 'Programs\bazelisk')
         shell: pwsh
       - name: checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
       - name: cache bazel
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~\AppData\Local\bazel-cache
