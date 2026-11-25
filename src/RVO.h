@@ -87,7 +87,7 @@ href="https://gamma.cs.unc.edu/CA/">Optimal Reciprocal Collision Avoidance</a>
 (ORCA) for local collision avoidance. <b>RVO2-3D Library</b> does not replace
 RVO2 Library; for two-dimensional applications, RVO2 Library should be used.
 
-@section structure Structure of RVO2-3D Library
+@section structure_of_rvo2_3d_library Structure of RVO2-3D Library
 
 The structure of <b>RVO2-3D Library</b> is similar to that of RVO2 Library.
 Users familiar with RVO2 Library should find little trouble in using <b>RVO2-3D

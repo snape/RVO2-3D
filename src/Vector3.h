@@ -262,7 +262,7 @@ RVO3D_EXPORT Vector3 operator*(float scalar, const Vector3 &vector);
  * @relates       Vector3
  * @brief         Inserts the specified three-dimensional vector into the
  *                specified output stream.
- * @param[in,out] os     The output stream into which the three-dimensional
+ * @param[in,out] stream The output stream into which the three-dimensional
  *                       vector should be inserted.
  * @param[in]     vector The three-dimensional vector which to insert into the
  *                       output stream.
