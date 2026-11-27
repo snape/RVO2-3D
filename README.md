@@ -83,6 +83,7 @@ available using OpenMP for efficient parallelization of the simulation.
 
 ![Bazel](https://github.com/snape/RVO2-3D/actions/workflows/bazel.yml/badge.svg?branch=main)
 ![CMake](https://github.com/snape/RVO2-3D/actions/workflows/cmake.yml/badge.svg?branch=main)
+![Meson](https://github.com/snape/RVO2-3D/actions/workflows/meson.yml/badge.svg?branch=main)
 
 <!-- REUSE-IgnoreStart -->
 SPDX-FileCopyrightText: 2008 University of North Carolina at Chapel Hill  

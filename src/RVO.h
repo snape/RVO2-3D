@@ -105,6 +105,29 @@ Create and switch to your chosen build directory, e.g.,
 source directory, e.g., <tt>cmake $RVO3D_ROOT/src</tt>. Build files for the
 default generator for your platform will be generated in the build directory.
 
+@section meson Meson
+
+@code{.sh}
+git clone https://github.com/snape/RVO2-3D.git
+cd RVO2-3D
+meson setup _build
+meson compile -C _build
+meson test -C _build
+meson install -C _build
+@endcode
+
+Enable optional OpenMP support with:
+
+@code{.sh}
+meson configure _build -Dopenmp=enabled
+@endcode
+
+On Windows, configure Meson with a static default library:
+
+@code{.sh}
+meson setup _build -Ddefault_library=static
+@endcode
+
 @page using Using RVO2-3D Library
 
 @section structure Structure
