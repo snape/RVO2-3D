@@ -128,6 +128,9 @@ and on a daily schedule:
   (amd64 and arm64), macOS (arm64), and Windows (amd64 and arm64).
 - [`.github/workflows/buildifier.yml`](.github/workflows/buildifier.yml):
   enforces Bazel file formatting with buildifier.
+- [`.github/workflows/check-jsonschema.yml`](.github/workflows/check-jsonschema.yml):
+  validates [`compose.yaml`](compose.yaml) and [`renovate.json`](renovate.json)
+  against their respective schemas.
 - [`.github/workflows/cmake.yml`](.github/workflows/cmake.yml): builds and tests
   with CMake on AlmaLinux, Alpine Linux, Arch Linux, Fedora, openSUSE, Ubuntu
   (amd64 and arm64), macOS (arm64), and Windows (amd64 and arm64). CMake builds
@@ -136,12 +139,18 @@ and on a daily schedule:
   `WARNINGS_AS_ERRORS`.
 - [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml): runs GitHub
   CodeQL semantic code analysis for C++ on a weekly schedule.
+- [`.github/workflows/codespell.yml`](.github/workflows/codespell.yml):
+  checks spelling in source files and documentation with codespell.
 - [`.github/workflows/docker.yml`](.github/workflows/docker.yml): builds the
   development environment Docker image (amd64 and arm64) on a weekly schedule.
 - [`.github/workflows/hadolint.yml`](.github/workflows/hadolint.yml): lints
   the Dockerfile with hadolint.
+- [`.github/workflows/markdownlint.yml`](.github/workflows/markdownlint.yml):
+  lints Markdown files with markdownlint.
 - [`.github/workflows/reuse.yml`](.github/workflows/reuse.yml): verifies
   REUSE license compliance.
+- [`.github/workflows/validate-cff.yml`](.github/workflows/validate-cff.yml):
+  validates [`CITATION.cff`](CITATION.cff) against the CFF schema.
 - [`.github/workflows/yamllint.yml`](.github/workflows/yamllint.yml): lints
   all YAML files with yamllint.
 
