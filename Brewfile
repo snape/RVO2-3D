@@ -49,6 +49,7 @@ brew 'jsonlint'
 brew 'lcov'
 brew 'llvm'
 brew 'markdownlint-cli'
+brew 'meson'
 brew 'ninja'
 brew 'pkgconf', conflicts_with: ['pkg-config']
 brew 'python'

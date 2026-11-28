@@ -68,8 +68,8 @@ requirement listed in the Package Requirements for Quality Level 2 in
 ### Version Scheme [1.i]
 
 `RVO2-3D Library` uses [Semantic Versioning 2.0.0](https://semver.org/), and is
-at version `1.1.0`. The version is declared in `CMakeLists.txt` and
-`MODULE.bazel`.
+at version `1.1.0`. The version is declared in `CMakeLists.txt`,
+`MODULE.bazel`, and `meson.build`.
 
 ### Version Stability [1.ii]
 
@@ -147,6 +147,13 @@ and on a daily schedule:
   the Dockerfile with hadolint.
 - [`.github/workflows/markdownlint.yml`](.github/workflows/markdownlint.yml):
   lints Markdown files with markdownlint.
+- [`.github/workflows/meson-format.yml`](.github/workflows/meson-format.yml):
+  enforces Meson file formatting with `meson format`.
+- [`.github/workflows/meson.yml`](.github/workflows/meson.yml): builds and
+  tests with Meson on AlmaLinux, Alpine Linux, Arch Linux, Fedora, openSUSE,
+  Ubuntu (amd64 and arm64), macOS (arm64), and Windows (amd64 and
+  arm64). Meson builds enable LTO (`-Db_lto=true`), `openmp` (on Linux), and
+  `werror`.
 - [`.github/workflows/reuse.yml`](.github/workflows/reuse.yml): verifies
   REUSE license compliance.
 - [`.github/workflows/validate-cff.yml`](.github/workflows/validate-cff.yml):
@@ -207,7 +214,7 @@ the project README.
 ### Feature Testing [4.i]
 
 One system-level simulation scenario forms the test suite, run via `ctest`
-(CMake) and `bazel test` (Bazel):
+(CMake), `bazel test` (Bazel), and `meson test` (Meson):
 
 - **Sphere**: 812 agents initially distributed evenly on a sphere moving to
   their antipodal positions.
@@ -277,16 +284,16 @@ None.
 `RVO2-3D Library` is built and tested continuously via GitHub Actions on the
 following platforms:
 
-| Platform       | Architecture  | Build System |
-|----------------|---------------|--------------|
-| AlmaLinux      | amd64         | CMake, Bazel |
-| Alpine Linux   | amd64         | CMake        |
-| Arch Linux     | amd64         | CMake, Bazel |
-| Fedora         | amd64         | CMake, Bazel |
-| openSUSE Leap  | amd64         | CMake, Bazel |
-| Ubuntu         | amd64, arm64  | CMake, Bazel |
-| macOS          | arm64         | CMake, Bazel |
-| Windows        | amd64, arm64  | CMake, Bazel |
+| Platform       | Architecture  | Build System        |
+|----------------|---------------|---------------------|
+| AlmaLinux      | amd64         | CMake, Bazel, Meson |
+| Alpine Linux   | amd64         | CMake, Meson        |
+| Arch Linux     | amd64         | CMake, Bazel, Meson |
+| Fedora         | amd64         | CMake, Bazel, Meson |
+| openSUSE Leap  | amd64         | CMake, Bazel, Meson |
+| Ubuntu         | amd64, arm64  | CMake, Bazel, Meson |
+| macOS          | arm64         | CMake, Bazel, Meson |
+| Windows        | amd64, arm64  | CMake, Bazel, Meson |
 
 ## Security [7]
 
